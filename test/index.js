@@ -86,7 +86,7 @@ describe('HistoDB', function() {
   var revs
   var expectedRevs = revs1.slice(3)
   it('should find the missing revs to get from fork B to fork A', function(done) {
-    db.revDifference(forkAHead.hash, function(err, res) {
+    db.revDifference(db.head(), forkAHead.hash, function(err, res) {
       var expectedDiff = expectedRevs.map(function(each) { return each.hash }).reverse()
       assert.deepEqual(res, expectedDiff)
       revs = res
