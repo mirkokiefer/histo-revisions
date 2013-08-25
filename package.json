@@ -7,5 +7,12 @@
     "test": "node_modules/.bin/mocha -R spec"
   },
   "author": "Mirko Kiefer <mail@mirkokiefer.com>",
-  "license": "BSD"
+  "license": "BSD",
+  "dependencies": {
+    "sha1": "~1.1.0",
+    "canonical-json": "0.0.3"
+  },
+  "devDependencies": {
+    "mocha": "~1.12.0"
+  }
 }
