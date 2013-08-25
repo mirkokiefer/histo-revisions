@@ -1,0 +1,11 @@
+{
+  "name": "histodb",
+  "version": "0.0.1",
+  "description": "peer-to-peer synchronizable database written in javascript",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha -R spec"
+  },
+  "author": "Mirko Kiefer <mail@mirkokiefer.com>",
+  "license": "BSD"
+}
