@@ -21,7 +21,7 @@ describe('HistoDB', function() {
   })
   it('should read the data', function(done) {
     var commit = commits[0]
-    db.read(commit.hash, function(err, res) {
+    db.read(function(err, res) {
       assert.equal(res, commit.data)
       done()
     })
