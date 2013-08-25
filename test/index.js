@@ -8,9 +8,9 @@ var createKeyValueStore = require('./mock-stores/key-value-store')
 
 var cas = createContentAddressable()
 var kvStore = createKeyValueStore()
-var db = histo.createDB({commitStore: cas, refStore: kvStore})
+var db = histo.createDB({revisionStore: cas, branchStore: kvStore})
 
-var commits1 = [
+var revs1 = [
   {data: 'abc'},
   {data: 'def'},
   {data: 'ghi'},
@@ -19,16 +19,19 @@ var commits1 = [
   {data: 'pqr'}
 ]
 
-var forkCommit = commits1[2]
+var forkAHead = revs1[5]
+var commonAncestor = revs1[2]
 
-var commits2 = [
+var revs2 = [
   {data: 'stu'},
   {data: 'vwx'},
   {data: 'yz'}
 ]
 
-var writeCommits = function(commits, cb) {
-  async.forEach(commits, function(each, cb) {
+var forkBHead = revs2[2]
+
+var writeCommits = function(revs, cb) {
+  async.forEach(revs, function(each, cb) {
     db.put(each.data, function(err, res) {
       each.hash = res.head
       cb()
@@ -38,7 +41,7 @@ var writeCommits = function(commits, cb) {
 
 describe('HistoDB', function() {
   it('should write some data', function(done) {
-    var commit = commits1[0]
+    var commit = revs1[0]
     db.put(commit.data, function(err, res) {
       assert.ok(res.head)
       commit.hash = res.head
@@ -46,37 +49,37 @@ describe('HistoDB', function() {
     })
   })
   it('should read the data', function(done) {
-    var commit = commits1[0]
+    var commit = revs1[0]
     db.read(function(err, res) {
       assert.equal(res, commit.data)
       done()
     })
   })
   it('should write more data', function(done) {
-    var commits = commits1.slice(1)
-    writeCommits(commits, done)
+    var revs = revs1.slice(1)
+    writeCommits(revs, done)
   })
   it('should read the head', function(done) {
     db.read(function(err, res) {
-      assert.equal(res, commits1[5].data)
+      assert.equal(res, revs1[5].data)
       done()
     })
   })
-  it('should read the data of a previous put', function(done) {
-    db.readAtCommit(commits1[0].hash, function(err, res) {
-      assert.deepEqual(res, commits1[0].data)
+  it('should read the data of a previous revision', function(done) {
+    db.readAtRevision(revs1[0].hash, function(err, res) {
+      assert.deepEqual(res, revs1[0].data)
       done()
     })
   })
-  it('should set the head to a previous rev', function(done) {
-    db.setHead(forkCommit.hash, function() {
+  it('should set the head to a previous rev leaving a fork A', function(done) {
+    db.setHead(commonAncestor.hash, function() {
       db.read(function(err, res) {
-        assert.equal(res, forkCommit.data)
+        assert.equal(res, commonAncestor.data)
         done()
       })
     })
   })
-  it('should write more data creating a fork', function(done) {
-    writeCommits(commits2, done)
+  it('should write more data creating a fork B', function(done) {
+    writeCommits(revs2, done)
   })
 })
