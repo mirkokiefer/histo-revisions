@@ -11,10 +11,30 @@ var kvStore = createKeyValueStore()
 var db = histo.createDB({commitStore: cas, refStore: kvStore})
 
 var commits1 = [
-  {data: '123'},
-  {data: '456'},
-  {data: '789'}
+  {data: 'abc'},
+  {data: 'def'},
+  {data: 'ghi'},
+  {data: 'jkl'},
+  {data: 'mno'},
+  {data: 'pqr'}
 ]
+
+var forkCommit = commits1[2]
+
+var commits2 = [
+  {data: 'stu'},
+  {data: 'vwx'},
+  {data: 'yz'}
+]
+
+var writeCommits = function(commits, cb) {
+  async.forEach(commits, function(each, cb) {
+    db.put(each.data, function(err, res) {
+      each.hash = res.head
+      cb()
+    })
+  }, cb)
+}
 
 describe('HistoDB', function() {
   it('should write some data', function(done) {
@@ -34,16 +54,11 @@ describe('HistoDB', function() {
   })
   it('should write more data', function(done) {
     var commits = commits1.slice(1)
-    async.forEach(commits, function(each, cb) {
-      db.put(each.data, function(err, res) {
-        each.hash = res.head
-        cb()
-      })
-    }, done)
+    writeCommits(commits, done)
   })
   it('should read the head', function(done) {
     db.read(function(err, res) {
-      assert.equal(res, commits1[2].data)
+      assert.equal(res, commits1[5].data)
       done()
     })
   })
@@ -52,5 +67,16 @@ describe('HistoDB', function() {
       assert.deepEqual(res, commits1[0].data)
       done()
     })
+  })
+  it('should set the head to a previous rev', function(done) {
+    db.setHead(forkCommit.hash, function() {
+      db.read(function(err, res) {
+        assert.equal(res, forkCommit.data)
+        done()
+      })
+    })
+  })
+  it('should write more data creating a fork', function(done) {
+    writeCommits(commits2, done)
   })
 })
