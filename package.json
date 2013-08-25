@@ -10,7 +10,8 @@
   "license": "BSD",
   "dependencies": {
     "sha1": "~1.1.0",
-    "canonical-json": "0.0.3"
+    "canonical-json": "0.0.3",
+    "async": "~0.2.9"
   },
   "devDependencies": {
     "mocha": "~1.12.0"
