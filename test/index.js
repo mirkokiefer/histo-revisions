@@ -41,17 +41,17 @@ var writeCommits = function(revs, cb) {
 
 describe('HistoDB', function() {
   it('should write some data', function(done) {
-    var commit = revs1[0]
-    db.put(commit.data, function(err, res) {
+    var rev = revs1[0]
+    db.put(rev.data, function(err, res) {
       assert.ok(res.head)
-      commit.hash = res.head
+      rev.hash = res.head
       done()
     })
   })
   it('should read the data', function(done) {
-    var commit = revs1[0]
+    var rev = revs1[0]
     db.read(function(err, res) {
-      assert.equal(res, commit.data)
+      assert.equal(res, rev.data)
       done()
     })
   })
@@ -82,4 +82,14 @@ describe('HistoDB', function() {
   it('should write more data creating a fork B', function(done) {
     writeCommits(revs2, done)
   })
+  it('should find the missing revs to get from fork B to fork A', function(done) {
+    db.revDifference(forkAHead.hash, function(err, res) {
+      var expectedDiff = revs1.slice(3).map(function(each) { return each.hash }).reverse()
+      assert.deepEqual(res, expectedDiff)
+      done()
+    })
+  })
+  // it('should create an iterator for bulk-reading rev data', function(done) {
+
+  // })
 })

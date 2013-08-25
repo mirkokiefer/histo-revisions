@@ -11,7 +11,8 @@
   "dependencies": {
     "sha1": "~1.1.0",
     "canonical-json": "0.0.3",
-    "async": "~0.2.9"
+    "async": "~0.2.9",
+    "graph-difference": "0.0.2"
   },
   "devDependencies": {
     "mocha": "~1.12.0"
