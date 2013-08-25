@@ -94,7 +94,7 @@ describe('HistoDB', function() {
     })
   })
   it('should create an iterator for bulk-reading rev data', function(done) {
-    var revIterator = db.createIterator(revs)
+    var revIterator = db.readRevisions(revs)
     iterators.toArray(revIterator, function(err, res) {
       res.reverse().map(function(each, i) {
         assert.equal(each.data, expectedRevs[i].data)
