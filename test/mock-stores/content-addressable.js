@@ -4,7 +4,7 @@ var sha1 = require('sha1')
 var createCAS = function() {
   var store = {}
 
-  var write = function(data, cb) {
+  var put = function(data, cb) {
     var hash = sha1(data)
     store[hash] = data
     cb(null, hash)
@@ -15,7 +15,7 @@ var createCAS = function() {
   }
 
   return {
-    write: write,
+    put: put,
     read: read
   }
 }
