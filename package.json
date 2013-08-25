@@ -12,7 +12,9 @@
     "sha1": "~1.1.0",
     "canonical-json": "0.0.3",
     "async": "~0.2.9",
-    "graph-difference": "0.0.2"
+    "graph-difference": "0.0.2",
+    "async-iterators": "0.0.4",
+    "underscore": "~1.5.1"
   },
   "devDependencies": {
     "mocha": "~1.12.0"

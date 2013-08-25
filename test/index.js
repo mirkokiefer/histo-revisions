@@ -2,6 +2,7 @@
 var assert = require('assert')
 var histo = require('../lib/index')
 var async = require('async')
+var iterators = require('async-iterators')
 
 var createContentAddressable = require('./mock-stores/content-addressable')
 var createKeyValueStore = require('./mock-stores/key-value-store')
@@ -82,14 +83,24 @@ describe('HistoDB', function() {
   it('should write more data creating a fork B', function(done) {
     writeCommits(revs2, done)
   })
+  var revs
+  var expectedRevs = revs1.slice(3)
   it('should find the missing revs to get from fork B to fork A', function(done) {
     db.revDifference(forkAHead.hash, function(err, res) {
-      var expectedDiff = revs1.slice(3).map(function(each) { return each.hash }).reverse()
+      var expectedDiff = expectedRevs.map(function(each) { return each.hash }).reverse()
       assert.deepEqual(res, expectedDiff)
+      revs = res
       done()
     })
   })
-  // it('should create an iterator for bulk-reading rev data', function(done) {
-
-  // })
+  it('should create an iterator for bulk-reading rev data', function(done) {
+    var revIterator = db.createIterator(revs)
+    iterators.map(revIterator, function(err, each) { return each }, function(err, res) {
+      res.reverse().map(function(each, i) {
+        assert.equal(each.data, expectedRevs[i].data)
+        assert.equal(each.ancestors[0], revs1[i+2].hash)
+      })
+      done()
+    })
+  })
 })
