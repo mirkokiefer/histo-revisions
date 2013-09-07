@@ -21,6 +21,7 @@ function createKeyValueStore() {
   }
 
   return {
+    data: store,
     put: put,
     get: get,
     del: del

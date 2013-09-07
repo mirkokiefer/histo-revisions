@@ -17,6 +17,7 @@ function createCAS() {
   }
 
   return {
+    data: store.data,
     put: put,
     read: read
   }

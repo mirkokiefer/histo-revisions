@@ -117,8 +117,9 @@ describe('HistoDB', function() {
       revisionStore: createContentAddressable(),
       branchStore: createKeyValueStore()
     })
+    var db2RevStore = createContentAddressable()
     var db2 = histo.createDB({
-      revisionStore: createContentAddressable(),
+      revisionStore: db2RevStore,
       branchStore: createKeyValueStore()
     })
 
@@ -131,7 +132,10 @@ describe('HistoDB', function() {
     var synchronizer = histo.createSynchronizer(source, target)
     
     it('should pull changes from db1 to db2', function(done) {
-      synchronizer.synchronize(done)
+      synchronizer.synchronize(function() {
+        console.log(db2RevStore.data)
+        done()
+      })
     })
   })
 })
