@@ -27,7 +27,7 @@ var revs2 = [
 
 var forkBHead = revs2[2]
 
-var writeCommits = function(db, revs, cb) {
+var writeRevs = function(db, revs, cb) {
   async.forEach(revs, function(each, cb) {
     db.put(each.data, function(err, res) {
       each.hash = res.head
@@ -58,7 +58,7 @@ describe('HistoDB', function() {
     })
     it('should write more data', function(done) {
       var revs = revs1.slice(1)
-      writeCommits(db, revs, done)
+      writeRevs(db, revs, done)
     })
     it('should read the head', function(done) {
       db.read(function(err, res) {
@@ -81,7 +81,7 @@ describe('HistoDB', function() {
       })
     })
     it('should write more data creating a fork B', function(done) {
-      writeCommits(db, revs2, done)
+      writeRevs(db, revs2, done)
     })
     var revs
     var expectedRevs = revs1.slice(3)
@@ -105,6 +105,25 @@ describe('HistoDB', function() {
     })
   })
   describe('synchronization', function() {
+    var db1 = histo.createDB({
+      revisionStore: createContentAddressable(),
+      branchStore: createKeyValueStore()
+    })
+    var db2 = histo.createDB({
+      revisionStore: createContentAddressable(),
+      branchStore: createKeyValueStore()
+    })
 
+    it('should populate db1', function(done) {
+      writeRevs(db1, revs1.slice(0, 2), done)
+    })
+
+    var source = histo.createSource(db1)
+    var target = histo.createTarget(db2)
+    var synchronizer = histo.createSynchronizer(source, target)
+    
+    it('should pull changes from db1 to db2', function(done) {
+      synchronizer.synchronize(done)
+    })
   })
 })
