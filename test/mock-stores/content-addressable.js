@@ -1,16 +1,16 @@
 
 var sha1 = require('sha1')
 
-var createCAS = function() {
+function createCAS() {
   var store = {}
 
-  var put = function(data, cb) {
+  function put(data, cb) {
     var hash = sha1(data)
     store[hash] = data
     cb(null, hash)
   }
 
-  var read = function(hash, cb) {
+  function read(hash, cb) {
     cb(null, store[hash])
   }
 

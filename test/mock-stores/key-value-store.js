@@ -1,13 +1,13 @@
 
-var createKeyValueStore = function() {
+function createKeyValueStore() {
   var store = {}
 
-  var put = function(key, value, cb) {
+  function put(key, value, cb) {
     store[key] = value
     cb(null)
   }
 
-  var get = function(key, cb) {
+  function get(key, cb) {
     if (store[key]) {
       cb(null, store[key])
     } else {
@@ -15,7 +15,7 @@ var createKeyValueStore = function() {
     }
   }
 
-  var del = function(key, cb) {
+  function del(key, cb) {
     delete store[key]
     cb(null)
   }
