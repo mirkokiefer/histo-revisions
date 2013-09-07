@@ -103,6 +103,14 @@ describe('HistoDB', function() {
         done()
       })
     })
+    it('should find all revs of fork A', function(done) {
+      db.revDifference(null, forkAHead.hash, function(err, res) {
+        var expectedDiff = revs1.map(function(each) { return each.hash }).reverse()
+        assert.deepEqual(res, expectedDiff)
+        revs = res
+        done()
+      })
+    })
   })
   describe('synchronization', function() {
     var db1 = histo.createDB({

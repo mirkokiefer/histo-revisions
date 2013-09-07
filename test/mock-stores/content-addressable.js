@@ -1,17 +1,19 @@
 
 var sha1 = require('sha1')
+var createKeyValueStore = require('./key-value-store')
 
 function createCAS() {
-  var store = {}
+  var store = createKeyValueStore()
 
   function put(data, cb) {
     var hash = sha1(data)
-    store[hash] = data
-    cb(null, hash)
+    store.put(hash, data, function() {
+      cb(null, hash)
+    })
   }
 
   function read(hash, cb) {
-    cb(null, store[hash])
+    store.get(hash, cb)
   }
 
   return {
