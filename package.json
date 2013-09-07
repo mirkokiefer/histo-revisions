@@ -14,7 +14,7 @@
     "async": "~0.2.9",
     "graph-difference": "0.1.0",
     "underscore": "~1.5.1",
-    "async-iterators": "~0.1.2",
+    "async-iterators": "~0.2.2",
     "node-uuid": "~1.4.1"
   },
   "devDependencies": {
