@@ -18,7 +18,7 @@ HistoDB itself is agnostic to the type of data it tracks.
 It only receives a string representation of a commits' data.
 This representation could be a serialized form of the actual data or just a hash of the data which is stored separately.
 Pluggable modules are responsible for implementing custom data types that can be synchronized.
-This includes efficient storage across commits and implementatin of merging and conflict resolution logic.
+This includes efficient storage across commits and implementation of merging and conflict resolution logic.
 
 Possible data types could be:
 
