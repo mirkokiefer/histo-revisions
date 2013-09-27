@@ -124,8 +124,9 @@ describe('HistoDB', function() {
     })
   })
   describe('synchronization', function() {
+    var db1RevStore = createContentAddressable()
     var db1 = histo.createDB({
-      revisionStore: createContentAddressable(),
+      revisionStore: db1RevStore,
       branchStore: createKeyValueStore()
     })
     var db2RevStore = createContentAddressable()
@@ -143,8 +144,9 @@ describe('HistoDB', function() {
     var synchronizer = histo.createSynchronizer(source, target)
     
     it('should pull changes from db1 to db2', function(done) {
+      assert.notDeepEqual(db2RevStore.data, db1RevStore.data)
       synchronizer.run(function() {
-        console.log(db2RevStore.data)
+        assert.deepEqual(db2RevStore.data, db1RevStore.data)
         done()
       })
     })
