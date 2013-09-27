@@ -110,6 +110,18 @@ describe('HistoDB', function() {
         done()
       })
     })
+    it('should find the common ancestor of two refs', function(done) {
+      db.commonAncestor(forkAHead.ref, forkBHead.ref, function(err, res) {
+        assert.equal(res, commonAncestor.ref)
+        done()
+      })
+    })
+    it('should find the common ancestor of head and a ref', function(done) {
+      db.commonAncestor(forkAHead.ref, function(err, res) {
+        assert.equal(res, commonAncestor.ref)
+        done()
+      })
+    })
   })
   describe('synchronization', function() {
     var db1 = histo.createDB({
