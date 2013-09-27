@@ -139,8 +139,8 @@ describe('HistoDB', function() {
       writeRevs(db1, revs1.slice(0, 2), done)
     })
 
-    var source = histo.createSource(db1)
-    var target = histo.createTarget(db2)
+    var source = histo.createLocalSource(db1)
+    var target = histo.createLocalTarget(db2)
     var synchronizer = histo.createSynchronizer(source, target)
     
     it('should pull changes from db1 to db2', function(done) {
