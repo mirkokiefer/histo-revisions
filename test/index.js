@@ -131,7 +131,7 @@ describe('HistoDB', function() {
     var synchronizer = histo.createSynchronizer(source, target)
     
     it('should pull changes from db1 to db2', function(done) {
-      synchronizer.synchronize(function() {
+      synchronizer.run(function() {
         console.log(db2RevStore.data)
         done()
       })
