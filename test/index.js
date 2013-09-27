@@ -2,7 +2,7 @@
 var assert = require('assert')
 var histo = require('../lib/index')
 var async = require('async')
-var iterators = require('async-iterators')
+var streamUtils = require('simple-stream')
 
 var createContentAddressable = require('./mock-stores/content-addressable')
 var createKeyValueStore = require('./mock-stores/key-value-store')
@@ -95,7 +95,7 @@ describe('HistoDB', function() {
     })
     it('should create an iterator for bulk-reading revisions', function(done) {
       var revIterator = db.readRevisions(refDiff)
-      iterators.toArray(revIterator, function(err, res) {
+      streamUtils.toArray(revIterator)(function(err, res) {
         res.reverse().map(function(each, i) {
           assert.equal(each.data, expectedRevs[i].data)
           assert.equal(each.ancestors[0], revs1[i+2].ref)
