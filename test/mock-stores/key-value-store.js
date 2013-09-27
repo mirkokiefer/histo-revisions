@@ -1,7 +1,16 @@
 
+module.exports = createKeyValueStore
+
 function createKeyValueStore() {
   var store = {}
 
+  return {
+    data: store,
+    put: put,
+    get: get,
+    del: del
+  }
+  
   function put(key, value, cb) {
     store[key] = value
     cb(null)
@@ -19,13 +28,4 @@ function createKeyValueStore() {
     delete store[key]
     cb(null)
   }
-
-  return {
-    data: store,
-    put: put,
-    get: get,
-    del: del
-  }
 }
-
-module.exports = createKeyValueStore
