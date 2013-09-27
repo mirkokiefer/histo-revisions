@@ -67,7 +67,7 @@ describe('HistoDB', function() {
       })
     })
     it('should read the data of a previous revision', function(done) {
-      db.getAtRef(revs1[0].ref, function(err, res) {
+      db.get(revs1[0].ref, function(err, res) {
         assert.deepEqual(res, revs1[0].data)
         done()
       })
