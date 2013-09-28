@@ -7,15 +7,15 @@ A `ref` is similar to a git commit hash.
 ##Documentation
 
 - [`histoRefs.createDB(opts) -> db`](#createDB)
+- [`db.put(data, [ancestorRefs], cb)`](#put)
+- [`db.get([ref], cb)`](#get)
 - [`db.head() -> ref`](#head)
 - [`db.setHead(ref, cb)`](#setHead)
 - [`db.remoteHead(remoteName, cb)`](#remoteHead)
 - [`db.setRemoteHead(remoteName, ref, cb)`](#setRemoteName)
-- [`db.put(data, [ancestorRefs], cb)`](#put)
-- [`db.get([ref], cb)`](#get)
 - [`db.refDifference(fromRef, toRef, cb)`](#refDifference)
-- [`db.readRevisions(refs) -> stream`](#readRevisions)
-- [`db.writeRevisions(stream, cb)`](#writeRevisions)
+- [`db.createStream(refs) -> stream`](#createStream)
+- [`db.writeStream(stream, cb)`](#writeStream)
 - [`db.commonAncestor(ref1, ref2, cb)`](#commonAncestor)
 - [`histoRefs.createSynchronizer(sourceDB, targetDB) -> synchronizer`](#createSynchronizer)
 - [`synchronizer.run(cb)`](#syncRun)
@@ -45,6 +45,15 @@ With `revStore` being an object with a content-addressable store interface:
 - `get(key, cb)`
 - `del(key, cb)`
 
+<a name="put" />
+###db.put(data, [ancestorRefs], cb)
+Writes some data to the db. If `ancestorRefs is not specified the current head is used as the ancestor.
+On success a ref to the written data is passed to the callback.
+
+<a name="get" />
+###db.get([ref], cb)
+Reads the data for a given ref. If `ref` is not specified the current head is used.
+
 <a name="head" />
 ###db.head() -> ref
 Returns the ref of the current head of the store.
@@ -63,25 +72,16 @@ Responds with the head ref of a remote database that is known to `db`.
 Updates the remote head of a remote database.
 This function is usually not called directly but by a synchronizer.
 
-<a name="put" />
-###db.put(data, [ancestorRefs], cb)
-Writes some data to the db. If `ancestorRefs is not specified the current head is used as the ancestor.
-On success a ref to the written data is passed to the callback.
-
-<a name="get" />
-###db.get([ref], cb)
-Reads the data for a given ref. If `ref` is not specified the current head is used.
-
 <a name="refDifference" />
 ###db.refDifference(fromRef, toRef, cb)
 Responds with the list of refs that is required to get from `ref1` to `ref2`.
 
-<a name="readRevisions" />
-###db.readRevisions(refs) -> stream
+<a name="createStream" />
+###db.createStream(refs) -> stream
 Returns a [simple-stream](https://github.com/mirkokiefer/simple-stream) source for reading the data for a given list of refs.
 
-<a name="writeRevisions" />
-###db.writeRevisions(stream, cb)
+<a name="writeStream" />
+###db.writeStream(stream, cb)
 Writes the `stream` source of data to the database.
 
 <a name="commonAncestor" />
@@ -94,13 +94,13 @@ Responds with the common ancestor ref of two refs.
 
 - `head(cb)`
 - `refDifference(fromRef, toRef, cb)`
-- `readRevisions(refs)` -> `stream`
+- `createStream(refs)` -> `stream`
 
 `targetDB` requires the following set of functions:
 
 - `head(cb)`
 - `remoteHead(remoteName, cb)`
-- `writeRevisions(stream, cb)`
+- `writeStream(stream, cb)`
 - `setRemoteHead(remoteName, ref, cb)`
 
 <a name="syncRun" />

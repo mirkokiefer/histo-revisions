@@ -94,8 +94,8 @@ describe('HistoDB', function() {
       })
     })
     it('should create an iterator for bulk-reading revisions', function(done) {
-      var revIterator = db.readRevisions(refDiff)
-      streamUtils.toArray(revIterator)(function(err, res) {
+      var stream = db.createStream(refDiff)
+      streamUtils.toArray(stream)(function(err, res) {
         res.reverse().map(function(each, i) {
           assert.equal(each.data, expectedRevs[i].data)
           assert.equal(each.ancestors[0], revs1[i+2].ref)
