@@ -1,11 +1,22 @@
 #histo-refs
 
 A database that is able to track changing revisions of data.
-Each revision is accessible through a unique **ref** which is based on a hash of the data's content and history.
+Each revision is accessible through a unique **ref** which is based on a cryptographic hash of the data's content and history.
 A **ref** is similar to a git commit hash.
 
 Each written data object is combined with a link to its ancestors - the combined objects are called a **revision**.
 A revision can be compared to a git commit object.
+
+Revisions look like this:
+
+``` js
+{
+  ancestors: ['someref'],
+  data: 'some data'
+}
+```
+
+The cryptographic hash of the revision is its **ref**.
 
 ##Documentation
 
