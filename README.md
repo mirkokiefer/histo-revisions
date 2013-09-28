@@ -1,8 +1,11 @@
 #histo-refs
 
 A database that is able to track changing revisions of data.
-Each revision is accessible through a unique `ref` which is based on a hash of the data's content and history.
-A `ref` is similar to a git commit hash.
+Each revision is accessible through a unique **ref** which is based on a hash of the data's content and history.
+A **ref** is similar to a git commit hash.
+
+Each written data object is combined with a link to its ancestors - the combined objects are called a **revision**.
+A revision can be compared to a git commit object.
 
 ##Documentation
 
@@ -78,11 +81,11 @@ Responds with the list of refs that is required to get from `ref1` to `ref2`.
 
 <a name="createStream" />
 ###db.createStream(refs) -> stream
-Returns a [simple-stream](https://github.com/mirkokiefer/simple-stream) source for reading the data for a given list of refs.
+Returns a [simple-stream](https://github.com/mirkokiefer/simple-stream) source for reading the revisions for a given list of refs.
 
 <a name="writeStream" />
 ###db.writeStream(stream, cb)
-Writes the `stream` source of data to the database.
+Writes the `stream` source of revisions to the database.
 
 <a name="commonAncestor" />
 ###db.commonAncestor(ref1, ref2, cb)
@@ -105,7 +108,7 @@ Responds with the common ancestor ref of two refs.
 
 <a name="syncRun" />
 ###synchronizer.run(cb)
-On success the synchronizer will have written all new data to `targetDB` which is determined by the ref difference from `sourceDB` to `targetDB`.
+On success the synchronizer will have written all new revisions to `targetDB` which is determined by the ref difference from `sourceDB` to `targetDB`.
 
 ##Contributors
 This project was created by Mirko Kiefer ([@mirkokiefer](https://github.com/mirkokiefer)).
