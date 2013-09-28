@@ -110,6 +110,12 @@ describe('HistoDB', function() {
         done()
       })
     })
+    it('should read the ancestors of a ref', function(done) {
+      db.ancestors(revs1[4].ref, function(err, res) {
+        assert.equal(res, revs1[3].ref)
+        done()
+      })
+    })
     it('should find the common ancestor of two refs', function(done) {
       db.commonAncestor(forkAHead.ref, forkBHead.ref, function(err, res) {
         assert.equal(res, commonAncestor.ref)

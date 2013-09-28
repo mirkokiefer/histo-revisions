@@ -28,9 +28,10 @@ The cryptographic hash of the revision is its **ref**.
 - [`db.remoteHead(remoteName, cb)`](#remoteHead)
 - [`db.setRemoteHead(remoteName, ref, cb)`](#setRemoteName)
 - [`db.refDifference(fromRef, toRef, cb)`](#refDifference)
+- [`db.ancestors(ref, cb)`](#ancestors)
+- [`db.commonAncestor(ref1, ref2, cb)`](#commonAncestor)
 - [`db.createStream(refs) -> stream`](#createStream)
 - [`db.writeStream(stream, cb)`](#writeStream)
-- [`db.commonAncestor(ref1, ref2, cb)`](#commonAncestor)
 - [`histoRefs.createSynchronizer(sourceDB, targetDB) -> synchronizer`](#createSynchronizer)
 - [`synchronizer.run(cb)`](#syncRun)
 
@@ -90,6 +91,14 @@ This function is usually not called directly but by a synchronizer.
 ###db.refDifference(fromRef, toRef, cb)
 Responds with the list of refs that is required to get from `ref1` to `ref2`.
 
+<a name="commonAncestor" />
+###db.commonAncestor(ref1, ref2, cb)
+Responds with the common ancestor ref of two refs.
+
+<a name="ancestors" />
+###db.ancestors(ref, cb)
+Responds with the ancestors of `ref`.
+
 <a name="createStream" />
 ###db.createStream(refs) -> stream
 Returns a [simple-stream](https://github.com/mirkokiefer/simple-stream) source for reading the revisions for a given list of refs.
@@ -97,10 +106,6 @@ Returns a [simple-stream](https://github.com/mirkokiefer/simple-stream) source f
 <a name="writeStream" />
 ###db.writeStream(stream, cb)
 Writes the `stream` source of revisions to the database.
-
-<a name="commonAncestor" />
-###db.commonAncestor(ref1, ref2, cb)
-Responds with the common ancestor ref of two refs.
 
 <a name="createSynchronizer" />
 ###histoRefs.createSynchronizer(sourceDB, targetDB) -> synchronizer
