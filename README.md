@@ -1,4 +1,7 @@
 #histo-revisions
+[![Build Status](https://travis-ci.org/mirkokiefer/histo-revisions.png?branch=master)](https://travis-ci.org/mirkokiefer/histo-revisions)
+
+[![NPM](https://nodei.co/npm/histo-revisions.png)](https://nodei.co/npm/histo-revisions/)
 
 A database that tracks changing revisions of data.
 
