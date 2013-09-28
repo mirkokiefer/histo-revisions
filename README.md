@@ -1,6 +1,7 @@
-#histo-refs
+#histo-revisions
 
-A database that is able to track changing revisions of data.
+A database that tracks changing revisions of data.
+
 Each revision is accessible through a unique **ref** which is based on a cryptographic hash of the data's content and history.
 A **ref** is similar to a git commit hash.
 
@@ -20,7 +21,7 @@ The cryptographic hash of the revision is its **ref**.
 
 ##Documentation
 
-- [`histoRefs.createDB(opts) -> db`](#createDB)
+- [`revisions.createDB(opts) -> db`](#createDB)
 - [`db.put(data, [ancestorRefs], cb)`](#put)
 - [`db.get([ref], cb)`](#get)
 - [`db.head() -> ref`](#head)
@@ -32,13 +33,13 @@ The cryptographic hash of the revision is its **ref**.
 - [`db.commonAncestor(ref1, ref2, cb)`](#commonAncestor)
 - [`db.createStream(refs) -> stream`](#createStream)
 - [`db.writeStream(stream, cb)`](#writeStream)
-- [`histoRefs.createSynchronizer(sourceDB, targetDB) -> synchronizer`](#createSynchronizer)
+- [`revisions.createSynchronizer(sourceDB, targetDB) -> synchronizer`](#createSynchronizer)
 - [`synchronizer.run(cb)`](#syncRun)
 
-###require('histo-refs') -> histoRefs
+###require('histo-revisions') -> revisions
 
 <a name="createDB" />
-###histoRefs.createDB(opts) -> db
+###revisions.createDB(opts) -> db
 `opts` is expected to be:
 
 ``` js
@@ -108,7 +109,7 @@ Returns a [simple-stream](https://github.com/mirkokiefer/simple-stream) source f
 Writes the `stream` source of revisions to the database.
 
 <a name="createSynchronizer" />
-###histoRefs.createSynchronizer(sourceDB, targetDB) -> synchronizer
+###revisions.createSynchronizer(sourceDB, targetDB) -> synchronizer
 `sourceDB` is expected to be an object with the subset of db functions:
 
 - `head(cb)`

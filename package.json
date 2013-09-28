@@ -1,5 +1,5 @@
 {
-  "name": "histodb",
+  "name": "histo-revisions",
   "version": "0.0.1",
   "description": "peer-to-peer synchronizable database written in javascript",
   "main": "lib/index.js",
