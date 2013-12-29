@@ -95,9 +95,13 @@ This function is usually not called directly but by a synchronizer.
 ###db.refDifference(fromRef, toRef, cb)
 Responds with the list of refs that is required to get from `ref1` to `ref2`.
 
+The difference is computed using the [graph-difference](https://github.com/mirkokiefer/graph-difference) module.
+
 <a name="commonAncestor" />
 ###db.commonAncestor(ref1, ref2, cb)
 Responds with the common ancestor ref of two refs.
+
+The common ancestor is computed using the [ancestor](https://github.com/mirkokiefer/ancestor) module.
 
 <a name="ancestors" />
 ###db.ancestors(ref, cb)
