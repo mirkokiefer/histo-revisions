@@ -86,11 +86,13 @@ describe('HistoDB', function() {
     var refDiff
     var expectedRevs = revs1.slice(3)
     it('should find the missing refs to get from fork B to fork A', function(done) {
-      db.refDifference(db.head(), forkAHead.ref, function(err, res) {
-        var expectedDiff = expectedRevs.map(function(each) { return each.ref }).reverse()
-        assert.deepEqual(res, expectedDiff)
-        refDiff = res
-        done()
+      db.head(function(err, head) {
+        db.refDifference(head, forkAHead.ref, function(err, res) {
+          var expectedDiff = expectedRevs.map(function(each) { return each.ref }).reverse()
+          assert.deepEqual(res, expectedDiff)
+          refDiff = res
+          done()
+        })
       })
     })
     it('should create an iterator for bulk-reading revisions', function(done) {
