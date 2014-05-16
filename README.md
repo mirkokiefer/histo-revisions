@@ -174,5 +174,9 @@ readRemoteRev(targetDB, 'your-remote-name', function(err, remoteRev) {
 });
 ```
 
+##Todo
+- list of remotes
+- garbage collect history 
+
 ##Contributors
 This project was created by Mirko Kiefer ([@mirkokiefer](https://github.com/mirkokiefer)).
