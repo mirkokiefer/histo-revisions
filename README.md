@@ -27,8 +27,8 @@ The cryptographic hash of the revision is its **ref**.
 - [`revisions.createDB(opts) -> db`](#createDB)
 - [`db.put(data, [ancestorRefs], cb)`](#put)
 - [`db.get([ref], cb)`](#get)
-- [`db.head() -> ref`](#head)
-- [`db.setHead(ref, cb)`](#setHead)
+- [`db.head(cb) -> ref`](#head)
+- [`db.setHead(ref, [previousHead], cb)`](#setHead)
 - [`db.remoteHead(remoteName, cb)`](#remoteHead)
 - [`db.setRemoteHead(remoteName, ref, cb)`](#setRemoteName)
 - [`db.refDifference(fromRef, toRef, cb)`](#refDifference)
@@ -38,6 +38,7 @@ The cryptographic hash of the revision is its **ref**.
 - [`db.writeStream(stream, cb)`](#writeStream)
 - [`revisions.createSynchronizer(sourceDB, targetDB) -> synchronizer`](#createSynchronizer)
 - [`synchronizer.run(cb)`](#syncRun)
+- [Merging synchronized data](#merging)
 
 ###require('histo-revisions') -> revisions
 
@@ -75,13 +76,14 @@ On success a ref to the written data is passed to the callback.
 Reads the data for a given ref. If `ref` is not specified the current head is used.
 
 <a name="head" />
-###db.head() -> ref
-Returns the ref of the current head of the store.
+###db.head(cb) -> ref
+The ref of the current head of the store is passed to the callback.
 The head changes every time new data is written or the head was explicitly set through `setHead`.
 
 <a name="setHead" />
-###db.setHead(ref)
+###db.setHead(ref, [previousHead], cb)
 Explicitly sets the head to a known ref.
+You can pass in the previous head if you want to use optimistic locking. If the head has been updated in the meantime, the function will callback with an error.
 
 <a name="remoteHead" />
 ###db.remoteHead(remoteName, cb)
@@ -135,6 +137,45 @@ Writes the `stream` source of revisions to the database.
 <a name="syncRun" />
 ###synchronizer.run(cb)
 On success the synchronizer will have written all new revisions to `targetDB` which is determined by the ref difference from `sourceDB` to `targetDB`.
+
+<a name="merging" />
+###Merging synchronized data
+Synchronizing two databases does not update the target databases' head.
+It will only write all revisions to the target.
+To merge the data you need to read the remote head of the source database, get the corresponding data, merge the data and write a new revision:
+
+``` js
+function readRemoteRev(db, remoteName, cb) {
+  db.remoteHead(remoteName, function(err, remoteHead) {
+    db.get(remoteHead, function(err, remoteData) {
+      cb(null, {head: remoteHead, data: remoteData});
+    });
+  });
+}
+
+function readLocalRev(db, cb) {
+  db.head(function(err, localHead) {
+    db.get(localHead, function(localData) {
+      cb(null, {head: localHead, data: remoteData});
+    });
+  });
+}
+
+readRemoteRev(targetDB, 'your-remote-name', function(err, remoteRev) {
+  readLocalRev(targetDB, function(err, localRev) {
+    var mergedData = yourMergeFunction(remoteRev.data, localRev.data);
+    var ancestors = [remoteRev.head, localRev.head];
+    targetDB.put(mergedData, ancestors, function(err, mergedRef) {
+      targetDB.setHead(mergedRef, localRev.head, function(err) {
+        // on err repeat merging with new local head
+      });
+    });
+  });
+});
+```
+
+##Todo
+- `setHead` should use optimistic locking (pass in previous head)
 
 ##Contributors
 This project was created by Mirko Kiefer ([@mirkokiefer](https://github.com/mirkokiefer)).
