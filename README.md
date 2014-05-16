@@ -8,7 +8,7 @@ A database that tracks changing revisions of data.
 Each revision is accessible through a unique **ref** which is based on a cryptographic hash of the data's content and history.
 A **ref** is similar to a git commit hash.
 
-Each written data object is combined with a link to its ancestors - the combined objects are called a **revision**.
+Each written data object is combined with a link to its ancestors - the combination is called a **revision**.
 A revision can be compared to a git commit object.
 
 Revisions look like this:
@@ -47,6 +47,7 @@ The cryptographic hash of the revision is its **ref**.
 
 ``` js
 {
+  name: 'your-db-name', // will generate uuid if omitted
   revisionStore: revStore,
   branchStore: branchStore
 }
@@ -117,8 +118,9 @@ Writes the `stream` source of revisions to the database.
 
 <a name="createSynchronizer" />
 ###revisions.createSynchronizer(sourceDB, targetDB) -> synchronizer
-`sourceDB` is expected to be an object with the subset of db functions:
+`sourceDB` is expected to be an object with the subset of db functions and properties:
 
+- `name`
 - `head(cb)`
 - `refDifference(fromRef, toRef, cb)`
 - `createStream(refs)` -> `stream`
