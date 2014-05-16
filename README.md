@@ -174,8 +174,5 @@ readRemoteRev(targetDB, 'your-remote-name', function(err, remoteRev) {
 });
 ```
 
-##Todo
-- `setHead` should use optimistic locking (pass in previous head)
-
 ##Contributors
 This project was created by Mirko Kiefer ([@mirkokiefer](https://github.com/mirkokiefer)).

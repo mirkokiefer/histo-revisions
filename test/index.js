@@ -130,6 +130,14 @@ describe('HistoDB', function() {
         done()
       })
     })
+    describe('optimistic locking when setting head', function() {
+      it('should not set head if previous head wrong', function(done) {
+        db.setHead(revs1[2].ref, revs1[1].ref, function(err) {
+          assert.equal(err.message, 'head conflict')
+          done()
+        })
+      })
+    })
   })
   describe('synchronization', function() {
     var db1RevStore = createContentAddressable()
